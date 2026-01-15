@@ -15,7 +15,7 @@ export default async function SaraDeshPage() {
       
       <div className="text-center mb-10">
         <h1 className="text-4xl font-bold text-base-content mb-2">
-          Sara Desh <span className="text-red-500">Map Interface</span> 🗺️
+          Sara Desh <span className="text-red-500">Map Interface</span>
         </h1>
         <p className="text-base-content/70">
           Find news from any district using our interactive map.
