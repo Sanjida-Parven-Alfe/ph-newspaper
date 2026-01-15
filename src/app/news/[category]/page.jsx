@@ -1,7 +1,8 @@
 import dbConnect from "@/lib/dbConnect";
 import News from "@/models/News";
 import NewsCard from "@/components/news/NewsCard";
-import { notFound } from "next/navigation"; 
+import Link from "next/link";
+import { notFound } from "next/navigation";
 
 export const dynamic = 'force-dynamic';
 
@@ -9,8 +10,11 @@ export default async function NewsCategoryPage(props) {
   await dbConnect();
   
   const params = await props.params;
+  const searchParams = await props.searchParams; 
+  
   const { category } = params;
   const decodedCategory = decodeURIComponent(category);
+  const sortBy = searchParams.sort || "date"; 
 
   const validCategories = [
     "Tech News", "Startups", "AI & Future", "Web Dev", "Career",
@@ -21,29 +25,62 @@ export default async function NewsCategoryPage(props) {
     return notFound();
   }
 
+  let sortOption = { createdAt: -1 }; 
+  if (sortBy === "popularity") {
+    sortOption = { popularity: -1 }; 
+  }
+
   const newsRaw = await News.find({ category: decodedCategory })
-    .sort({ createdAt: -1 })
+    .sort(sortOption)
     .lean();
   const news = JSON.parse(JSON.stringify(newsRaw));
 
   return (
     <div className="container mx-auto px-4 py-8 min-h-screen">
-      <div className="flex items-center gap-3 mb-6 border-b pb-4">
-         <div className="w-1.5 h-8 bg-red-600 rounded-full"></div>
-         <h1 className="text-3xl font-bold text-base-content uppercase">
-           {decodedCategory} <span className="text-red-500 text-sm normal-case align-middle ml-2">({news.length} News)</span>
-         </h1>
+      
+      <div className="flex flex-col sm:flex-row justify-between items-center border-b border-base-300 pb-4 mb-8 gap-4">
+         
+         {/* Title */}
+         <div className="flex items-center gap-3">
+            <div className="w-1.5 h-8 bg-red-600 rounded-full"></div>
+            <h1 className="text-3xl font-bold text-base-content uppercase">
+              {decodedCategory} 
+              <span className="text-red-500 text-sm normal-case align-middle ml-2 font-medium border border-red-200 px-2 py-0.5 rounded-full bg-red-50">
+                {news.length} News
+              </span>
+            </h1>
+         </div>
+
+         <div className="flex items-center gap-2">
+            <span className="text-sm font-semibold text-base-content/60 mr-1">Sort By:</span>
+            <div className="join border border-base-300 rounded-lg p-0.5 bg-base-100 shadow-sm">
+              <Link 
+                href={`/news/${category}?sort=date`} 
+                className={`btn btn-sm btn-ghost join-item ${sortBy === 'date' ? 'bg-black text-white hover:bg-black' : 'text-base-content/60'}`}
+              >
+                Date
+              </Link>
+              <Link 
+                href={`/news/${category}?sort=popularity`} 
+                className={`btn btn-sm btn-ghost join-item ${sortBy === 'popularity' ? 'bg-black text-white hover:bg-black' : 'text-base-content/60'}`}
+              >
+                Popularity
+              </Link>
+            </div>
+         </div>
+
       </div>
 
       {news.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
           {news.map((item) => (
             <NewsCard key={item._id} news={item} />
           ))}
         </div>
       ) : (
-        <div className="text-center py-20">
-          <h2 className="text-2xl font-bold text-gray-400">No news found in this category yet.</h2>
+        <div className="flex flex-col items-center justify-center py-20 bg-base-200 rounded-xl border-2 border-dashed border-base-300">
+          <div className="text-5xl mb-3 grayscale opacity-40">📰</div>
+          <h2 className="text-xl font-bold text-base-content/50">No news available</h2>
         </div>
       )}
     </div>
