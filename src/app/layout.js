@@ -21,6 +21,9 @@ export const metadata = {
     locale: 'en_US',
     type: 'website',
   },
+  icons: {
+    icon: "/logo.png", 
+  },
 };
 
 export default function RootLayout({ children }) {
