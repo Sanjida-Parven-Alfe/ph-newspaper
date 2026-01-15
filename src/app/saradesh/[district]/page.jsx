@@ -3,7 +3,8 @@ import News from "@/models/News";
 import NewsCard from "@/components/news/NewsCard";
 import NewsChart from "@/components/charts/NewsChart";
 import Link from "next/link";
-import { FaNewspaper } from "react-icons/fa"; 
+import { FaNewspaper } from "react-icons/fa";
+import { notFound } from "next/navigation";
 
 export const dynamic = 'force-dynamic';
 
@@ -23,11 +24,14 @@ export default async function DistrictDetailPage(props) {
   
   const params = await props.params;
   const searchParams = await props.searchParams;
-
   const district = decodeURIComponent(params.district);
-  const division = divisionMap[district] || "Bangladesh"; 
 
-  // Filter & Sort Logic
+  if (!divisionMap[district]) {
+    return notFound();
+  }
+
+  const division = divisionMap[district];
+
   const filterCategory = searchParams.category || "All";
   const sortBy = searchParams.sort || "date";
   
@@ -61,13 +65,13 @@ export default async function DistrictDetailPage(props) {
 
   return (
     <div className="container mx-auto px-4 py-8 min-h-screen bg-base-100">
-      
+  
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10 items-start">
-        
+
         <div className="lg:col-span-2">
           <div className="flex items-center gap-2 mb-2">
             <span className="badge badge-error text-white font-bold uppercase">District</span>
-            <span className="text-sm text-gray-500 font-semibold uppercase tracking-widest">{division}</span>
+            <span className="text-sm text-base-content/60 font-semibold uppercase tracking-widest">{division}</span>
           </div>
           
           <h1 className="text-4xl md:text-5xl font-bold text-base-content mb-4">
@@ -76,54 +80,52 @@ export default async function DistrictDetailPage(props) {
           
           <p className="text-base-content/70 text-lg leading-relaxed max-w-2xl mb-6">
             Welcome to the dedicated news portal for {district}. 
-            Here you can find all the latest updates, development stories, and local happenings 
-            curated specifically from our correspondents in {division}.
+            Here you can find all the latest updates, development stories, and local happenings.
           </p>
 
-          <div className="bg-white border border-gray-200 p-4 rounded-xl shadow-sm inline-flex items-center gap-4 pr-10">
- 
-            <div className="w-12 h-12 bg-red-50 rounded-full flex items-center justify-center text-red-600">
+          <div className="bg-base-200 border border-base-300 p-4 rounded-xl shadow-sm inline-flex items-center gap-4 pr-10">
+            <div className="w-12 h-12 bg-red-500/10 rounded-full flex items-center justify-center text-red-600">
                <FaNewspaper className="w-6 h-6" />
             </div>
-
             <div>
-              <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-0.5">Total News</p>
-              <p className="text-3xl font-black text-gray-800 leading-none">{allNewsStats.length}</p>
+              <p className="text-xs font-bold text-base-content/60 uppercase tracking-wider mb-0.5">Total News</p>
+              <p className="text-3xl font-black text-base-content leading-none">{allNewsStats.length}</p>
             </div>
           </div>
-
         </div>
 
+        {/* Right: Chart */}
         <div className="lg:col-span-1 w-full">
            {chartData.length > 0 ? (
              <NewsChart data={chartData} />
            ) : (
-             <div className="h-[200px] flex items-center justify-center bg-base-200 rounded-xl text-gray-400">
+             <div className="h-[200px] flex items-center justify-center bg-base-200 rounded-xl text-base-content/40 border border-base-300">
                No Chart Data
              </div>
            )}
         </div>
       </div>
 
-      <div className="flex flex-col sm:flex-row justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-gray-200 mb-8 gap-4 sticky top-[70px] z-40">
+      <div className="flex flex-col sm:flex-row justify-between items-center bg-base-200 p-4 rounded-xl shadow-sm border border-base-300 mb-8 gap-4 sticky top-[70px] z-40">
         
         <div className="flex items-center gap-2">
           <div className="w-1.5 h-6 bg-red-600 rounded-full"></div>
-          <h3 className="text-lg font-bold">News Archive</h3>
+          <h3 className="text-lg font-bold text-base-content">News Archive</h3>
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-
+          
+          {/* Category Filter */}
           <div className="dropdown dropdown-end">
-            <div tabIndex={0} role="button" className="btn btn-sm m-1 bg-base-200 border-none hover:bg-base-300">
-              Filter: <span className="text-red-600 font-bold">{filterCategory}</span> ▼
+            <div tabIndex={0} role="button" className="btn btn-sm m-1 bg-base-100 border border-base-300 hover:bg-base-300 text-base-content">
+              Filter: <span className="text-red-600 font-bold ml-1">{filterCategory}</span> ▼
             </div>
-            <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow-xl bg-white rounded-box w-52 border border-gray-100">
+            <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow-xl bg-base-100 rounded-box w-52 border border-base-300">
               {categories.map(cat => (
                 <li key={cat}>
                   <Link 
                     href={`/saradesh/${district}?category=${cat}&sort=${sortBy}`}
-                    className={filterCategory === cat ? "active font-bold" : ""}
+                    className={`text-base-content hover:bg-base-200 ${filterCategory === cat ? "active font-bold bg-base-200" : ""}`}
                   >
                     {cat}
                   </Link>
@@ -132,16 +134,17 @@ export default async function DistrictDetailPage(props) {
             </ul>
           </div>
 
-          <div className="join border border-gray-200 rounded-lg p-0.5 bg-base-100">
+          {/* Sort Buttons */}
+          <div className="join border border-base-300 rounded-lg p-0.5 bg-base-100">
             <Link 
               href={`/saradesh/${district}?category=${filterCategory}&sort=date`} 
-              className={`btn btn-sm btn-ghost join-item ${sortBy === 'date' ? 'bg-black text-white hover:bg-black' : 'text-gray-500'}`}
+              className={`btn btn-sm btn-ghost join-item ${sortBy === 'date' ? 'bg-base-content text-base-100 hover:bg-base-content/90' : 'text-base-content/60'}`}
             >
               Date
             </Link>
             <Link 
               href={`/saradesh/${district}?category=${filterCategory}&sort=popularity`} 
-              className={`btn btn-sm btn-ghost join-item ${sortBy === 'popularity' ? 'bg-black text-white hover:bg-black' : 'text-gray-500'}`}
+              className={`btn btn-sm btn-ghost join-item ${sortBy === 'popularity' ? 'bg-base-content text-base-100 hover:bg-base-content/90' : 'text-base-content/60'}`}
             >
               Popularity
             </Link>
@@ -150,6 +153,7 @@ export default async function DistrictDetailPage(props) {
         </div>
       </div>
 
+      {/* News Grid */}
       {filteredNews.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
           {filteredNews.map((news) => (
@@ -157,10 +161,9 @@ export default async function DistrictDetailPage(props) {
           ))}
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center py-24 bg-base-100 rounded-xl border-2 border-dashed border-base-200">
-          <div className="text-6xl mb-4">📭</div>
-          <h2 className="text-2xl font-bold text-gray-400">No news found!</h2>
-          <p className="text-gray-500 mt-2">Try changing the category filter.</p>
+        <div className="flex flex-col items-center justify-center py-24 bg-base-200 rounded-xl border-2 border-dashed border-base-300">
+          <div className="text-6xl mb-4 grayscale opacity-50">📭</div>
+          <h2 className="text-2xl font-bold text-base-content/50">No news found!</h2>
           <Link href={`/saradesh/${district}`} className="btn btn-link text-red-600 mt-2">
             Clear All Filters
           </Link>
