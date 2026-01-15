@@ -16,7 +16,7 @@
 ### 📰 Dynamic News & Categories
 - **Breaking News Ticker:** Real-time scrolling ticker for urgent updates.
 - **Featured Slider:** Highlights top stories.
-- **Category Filtering:** Dynamic routing for categories (Tech, Sports, Politics, etc.).
+- **Category Filtering:** Dynamic routing for categories.
 - **Pagination & Sorting:** Server-side pagination and sorting (by Date or Popularity) using URL `searchParams`.
 
 ### ⚡ Technical Highlights
