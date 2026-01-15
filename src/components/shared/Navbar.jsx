@@ -238,7 +238,7 @@ const Navbar = () => {
               className="w-10 h-10 object-contain"
             />
             <span className="text-xl font-bold hidden sm:block text-base-content">
-              PH Newspaper
+              PH <span className="text-red-500">Newspaper</span>
             </span>
           </Link>
         </div>
