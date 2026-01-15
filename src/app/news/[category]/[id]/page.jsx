@@ -2,6 +2,8 @@ import dbConnect from "@/lib/dbConnect";
 import News from "@/models/News";
 import Image from "next/image";
 import Link from "next/link";
+import mongoose from "mongoose"; 
+import { notFound } from "next/navigation"; 
 
 export const dynamic = 'force-dynamic';
 
@@ -12,6 +14,11 @@ export default async function NewsDetailPage(props) {
   const { id, category } = params;
   const decodedCategory = decodeURIComponent(category);
 
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return notFound(); 
+  }
+
   const newsRaw = await News.findByIdAndUpdate(
     id,
     { $inc: { popularity: 1 } },
@@ -19,8 +26,9 @@ export default async function NewsDetailPage(props) {
   ).lean();
 
   if (!newsRaw) {
-    return <div className="text-center py-20 text-2xl">News article not found!</div>;
+    return notFound(); 
   }
+  
   const news = JSON.parse(JSON.stringify(newsRaw));
 
   const relatedNewsRaw = await News.find({
@@ -40,11 +48,11 @@ export default async function NewsDetailPage(props) {
 
   return (
     <main className="min-h-screen bg-base-100 pb-10 pt-6"> 
-
+      
       <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         <div className="lg:col-span-8">
-          
+
           <div className="flex flex-wrap items-center gap-2 text-sm text-base-content/70 mb-6">
             <Link href="/" className="hover:text-red-600 transition-colors">Home</Link>
             <span>/</span>

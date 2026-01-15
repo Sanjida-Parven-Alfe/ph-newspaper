@@ -67,7 +67,7 @@ const Navbar = () => {
             role="button"
             className={`px-2 py-1 flex items-center gap-1 ${isParentActive()}`}
           >
-            Features
+           Categories
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-4 w-4"
@@ -188,7 +188,7 @@ const Navbar = () => {
               </li>
               <li>
                 <details>
-                  <summary>Features</summary>
+                  <summary>Categories</summary>
                   <ul className="p-2">
                     <li>
                       <Link href="/news/Tech News" onClick={closeDropdown}>
