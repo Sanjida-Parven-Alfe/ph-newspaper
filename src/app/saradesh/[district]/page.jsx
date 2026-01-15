@@ -1,8 +1,9 @@
 import dbConnect from "@/lib/dbConnect";
 import News from "@/models/News";
 import NewsCard from "@/components/news/NewsCard";
-import NewsChart from "@/components/charts/NewsChart"; 
+import NewsChart from "@/components/charts/NewsChart";
 import Link from "next/link";
+import { FaNewspaper } from "react-icons/fa"; 
 
 export const dynamic = 'force-dynamic';
 
@@ -26,6 +27,7 @@ export default async function DistrictDetailPage(props) {
   const district = decodeURIComponent(params.district);
   const division = divisionMap[district] || "Bangladesh"; 
 
+  // Filter & Sort Logic
   const filterCategory = searchParams.category || "All";
   const sortBy = searchParams.sort || "date";
   
@@ -72,21 +74,24 @@ export default async function DistrictDetailPage(props) {
             {district}
           </h1>
           
-          <p className="text-base-content/70 text-lg leading-relaxed max-w-2xl">
+          <p className="text-base-content/70 text-lg leading-relaxed max-w-2xl mb-6">
             Welcome to the dedicated news portal for {district}. 
             Here you can find all the latest updates, development stories, and local happenings 
             curated specifically from our correspondents in {division}.
           </p>
 
-          <div className="mt-6 flex gap-4">
-            <div className="stat bg-base-200 rounded-xl w-auto inline-flex px-6 py-2">
-              <div className="stat-figure text-red-600">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-8 h-8 stroke-current"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
-              </div>
-              <div className="stat-title font-bold text-gray-500">Total News</div>
-              <div className="stat-value text-red-600">{allNewsStats.length}</div>
+          <div className="bg-white border border-gray-200 p-4 rounded-xl shadow-sm inline-flex items-center gap-4 pr-10">
+ 
+            <div className="w-12 h-12 bg-red-50 rounded-full flex items-center justify-center text-red-600">
+               <FaNewspaper className="w-6 h-6" />
+            </div>
+
+            <div>
+              <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-0.5">Total News</p>
+              <p className="text-3xl font-black text-gray-800 leading-none">{allNewsStats.length}</p>
             </div>
           </div>
+
         </div>
 
         <div className="lg:col-span-1 w-full">
@@ -108,7 +113,7 @@ export default async function DistrictDetailPage(props) {
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          
+
           <div className="dropdown dropdown-end">
             <div tabIndex={0} role="button" className="btn btn-sm m-1 bg-base-200 border-none hover:bg-base-300">
               Filter: <span className="text-red-600 font-bold">{filterCategory}</span> ▼
