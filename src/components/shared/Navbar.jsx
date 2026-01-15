@@ -2,6 +2,22 @@ import Link from "next/link";
 import Image from "next/image";
 
 const Navbar = () => {
+
+const navLinks = (
+  <>
+    <li><Link href="/">Home</Link></li>
+    <li><Link href="/news">All News</Link></li>
+    
+    {/* Updated Categories for Tech Theme */}
+    <li><Link href="/news/Tech News">Tech News</Link></li>
+    <li><Link href="/news/Startups">Startups</Link></li>
+    <li><Link href="/news/AI & Future">AI & Future</Link></li>
+    <li><Link href="/news/Web Dev">Web Dev</Link></li>
+    <li><Link href="/news/Career">Career</Link></li>
+    <li><Link href="/saradesh" className="font-bold text-red-500"> Sara Desh </Link> </li>
+  </>
+);
+
   return (
     <div className="bg-base-100 border-b border-base-300 sticky top-0 z-50">
       <div className="navbar container mx-auto">
@@ -13,35 +29,19 @@ const Navbar = () => {
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
             </div>
             <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-              <li><Link href="/">Home</Link></li>
-              <li><Link href="/news">Features</Link></li>
-              <li><Link href="/news/Technology">Technology</Link></li>
-              <li><Link href="/news/Fashion">Fashion</Link></li>
-              <li><Link href="/news/Lifestyle">Lifestyle</Link></li>
+              {navLinks}
             </ul>
           </div>
           <Link href="/" className="flex items-center gap-2 px-2">
-            {/* Make sure logo.png exists in public folder */}
             <Image src="/logo.png" alt="PH Logo" width={40} height={40} className="w-10 h-10 object-contain" />
             <span className="text-xl font-bold hidden sm:block text-base-content">PH Newspaper</span>
           </Link>
         </div>
 
+        {/* Navbar Center - Desktop Menu */}
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1 font-semibold text-base-content">
-            <li><Link href="/" className="hover:text-primary">Home</Link></li>
-            <li>
-              <details>
-                <summary className="hover:text-primary">Features</summary>
-                <ul className="p-2 w-48 z-10 bg-base-100 shadow-lg rounded-t-none">
-                   <li><Link href="/news/International">International</Link></li>
-                   <li><Link href="/saradesh">Map View</Link></li>
-                </ul>
-              </details>
-            </li>
-            <li><Link href="/news/Technology" className="hover:text-primary">Technology</Link></li>
-            <li><Link href="/news/Fashion" className="hover:text-primary">Fashion</Link></li>
-            <li><Link href="/news/Lifestyle" className="hover:text-primary">Lifestyle</Link></li>
+            {navLinks}
           </ul>
         </div>
 
