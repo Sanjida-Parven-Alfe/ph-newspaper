@@ -7,6 +7,41 @@ import { notFound } from "next/navigation";
 
 export const dynamic = 'force-dynamic';
 
+export async function generateMetadata(props) {
+  await dbConnect();
+  const params = await props.params;
+  const { id } = params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return { title: "News Not Found - PH Newspaper" };
+  }
+
+  const news = await News.findById(id).select('title description image category').lean();
+
+  if (!news) {
+    return { title: "News Not Found - PH Newspaper" };
+  }
+
+  return {
+    title: news.title,
+    description: news.description.substring(0, 160) + "...",
+    openGraph: {
+      title: news.title,
+      description: news.description.substring(0, 160) + "...",
+      images: [
+        {
+          url: news.image,
+          width: 800,
+          height: 600,
+          alt: news.title,
+        },
+      ],
+      type: 'article',
+      section: news.category,
+    },
+  };
+}
+
 export default async function NewsDetailPage(props) {
   await dbConnect();
   
