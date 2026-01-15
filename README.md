@@ -2,7 +2,7 @@
 
 **PH Newspaper** is a modern, full-stack news portal built with **Next.js 15 (App Router)** and **MongoDB**. It features a dynamic data-driven interface, interactive map integration for district-wise news, and advanced filtering capabilities without complex state management.
 
-🔗 **Live Link:** [Insert Your Vercel Live Link Here]
+🔗 **Live Link:** [[https://ph-newspaper-bd.vercel.app/](https://ph-newspaper-bd.vercel.app/)]
 
 ---
 
