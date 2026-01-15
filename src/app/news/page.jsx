@@ -2,13 +2,11 @@ import dbConnect from "@/lib/dbConnect";
 import News from "@/models/News";
 import NewsCard from "@/components/news/NewsCard";
 
-// ডাটা যেন সবসময় ফ্রেশ থাকে
 export const dynamic = 'force-dynamic';
 
 export default async function NewsPage() {
   await dbConnect();
 
-  // ডাটাবেস থেকে সব নিউজ নিয়ে আসা হচ্ছে (নতুন নিউজ আগে)
   const allNews = await News.find({}).sort({ createdAt: -1 });
 
   return (
